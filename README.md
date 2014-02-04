@@ -2,6 +2,10 @@
 
 has_attributes is a ruby gem which provides a module for extending your classes with simple methods for creating elegant plain-ruby models.
 
+```
+gem install has_attributes
+```
+
 ## API
 
 has_attributes delivers the following class and instance methods:
