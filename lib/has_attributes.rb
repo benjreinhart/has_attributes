@@ -38,13 +38,13 @@ module HasAttributes
   end
 
   def attributes=(attrs)
-    self.class.model_attributes.each {|attr| send((attr.to_s << "=").to_sym, attrs[attr])}
+    self.class.model_attributes.each {|attr| public_send((attr.to_s << "=").to_sym, attrs[attr])}
     attributes
   end
 
   def attributes
     self.class.model_attributes.reduce({}) do |memo, attr|
-      memo.merge(attr => send(attr))
+      memo.merge(attr => public_send(attr))
     end
   end
 end
