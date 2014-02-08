@@ -12,15 +12,15 @@ has_attributes delivers the following class and instance methods:
 
 #### .model_attributes() → Set
 
-An attribute accessor on the class that contains a set of attributes specified with `has_attributes`
+An attribute accessor on the class that contains a set of attributes specified with `has_attributes`. It is added on the class via the included hook when `include`ing the module. If there is no call to `has_attributes`, then calling `model_attributes` on the class will be `nil`.
 
 #### .has_attributes(*args) → nil
 
-Takes any number of symbols or strings and defines attribute accessors for those attributes. It also defines a `model_attributes` method on the class which will return the set of attributes. `has_attributes` will attempt to copy any existing attributes from the parent class unless the last argument is a `Hash` and contains an `inherit` key set to `false`.
+Takes any number of symbols or strings and defines attribute accessors for those attributes. `has_attributes` will attempt to copy any existing attributes from the parent class unless the last argument is a `Hash` and contains an `inherit` key set to `false`.
 
 #### #attributes() → Hash
 
-Returns a hash whose keys are all the attributes declared `has_attributes` and the values are their corresponding values. If the values have not been set, the key will still be present in the hash but with a value of `nil`.
+Returns a hash whose keys are all the attributes declared with `has_attributes` and the values are their corresponding values.
 
 #### #attributes=(attrs) → Hash
 
