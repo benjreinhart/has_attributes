@@ -1,9 +1,10 @@
-require "has_attributes/version"
+require File.expand_path(File.join(File.dirname(__FILE__), "has_attributes", "version"))
 require "set"
 
 module HasAttributes
   def self.included(base)
     base.class.send(:attr_accessor, :model_attributes)
+    base.send(:model_attributes=, Set.new)
     base.extend(ClassMethods)
   end
 
@@ -18,7 +19,7 @@ module HasAttributes
         Set.new
       end
 
-      attrs = (model_attributes || Set.new).merge(attrs.map(&:to_sym))
+      attrs = model_attributes.merge(attrs.map(&:to_sym))
 
       if inherit_parent_attributes
         attrs = parent_attributes.merge(attrs)
@@ -38,13 +39,17 @@ module HasAttributes
   end
 
   def attributes=(attrs)
-    self.class.model_attributes.each {|attr| public_send((attr.to_s << "=").to_sym, attrs[attr])}
-    attributes
+    self.class.model_attributes.each do |attr|
+      public_send((attr.to_s << "=").to_sym, attrs[attr])
+    end
   end
 
   def attributes
     self.class.model_attributes.reduce({}) do |memo, attr|
-      memo.merge(attr => public_send(attr))
+      unless (value = public_send(attr)).nil?
+        memo[attr] = value
+      end
+      memo
     end
   end
 end

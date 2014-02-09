@@ -78,6 +78,13 @@ describe HasAttributes do
   describe "#attributes" do
     let(:klass) { create_model :attr1, :attr2 }
 
+    it "returns an empty hash when no attributes were defined" do
+      instance = Class.new { include HasAttributes }.new
+
+      instance.attributes = {a: true, b: false}
+      expect(instance.attributes).to eq({})
+    end
+
     it "sets a hash of attributes on the instance" do
       instance = klass.new
 
@@ -98,7 +105,8 @@ describe HasAttributes do
       expect(instance.attr1).to be_nil
       expect(instance.attr2).to be_false
 
-      expect(instance.attributes).to eq(attr1: nil, attr2: false)
+      expect(instance.attributes).not_to include(:attr1)
+      expect(instance.attributes).to include(attr2: false)
     end
 
     it "only sets attributes that were declared with .has_attributes" do
@@ -109,7 +117,9 @@ describe HasAttributes do
       expect(instance.attr1).to be_true
       expect(instance.attr2).to be_nil
 
-      expect(instance.attributes).to eq(attr1: true, attr2: nil)
+      expect(instance.attributes).to include(attr1: true)
+      expect(instance.attributes).not_to include(:attr2)
+      expect(instance.attributes).not_to include(:another_attr)
     end
   end
 end
