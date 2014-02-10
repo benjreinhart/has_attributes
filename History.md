@@ -1,4 +1,10 @@
-0.0.3 / 2014-02-08
+0.0.5 / 2014-02-10
+==================
+
+* Guard against nils, revert setting model_attributes to empty set in included hook
+
+
+0.0.4 / 2014-02-08
 ==================
 
 * Set model_attributes to an empty set in included hook
