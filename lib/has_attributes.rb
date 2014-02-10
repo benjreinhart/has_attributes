@@ -4,7 +4,6 @@ require "set"
 module HasAttributes
   def self.included(base)
     base.class.send(:attr_accessor, :model_attributes)
-    base.send(:model_attributes=, Set.new)
     base.extend(ClassMethods)
   end
 
@@ -19,7 +18,7 @@ module HasAttributes
         Set.new
       end
 
-      attrs = model_attributes.merge(attrs.map(&:to_sym))
+      attrs = (model_attributes || Set.new).merge(attrs.map(&:to_sym))
 
       if inherit_parent_attributes
         attrs = parent_attributes.merge(attrs)
@@ -39,13 +38,13 @@ module HasAttributes
   end
 
   def attributes=(attrs)
-    self.class.model_attributes.each do |attr|
+    (self.class.model_attributes || Set.new).each do |attr|
       public_send((attr.to_s << "=").to_sym, attrs[attr])
     end
   end
 
   def attributes
-    self.class.model_attributes.reduce({}) do |memo, attr|
+    (self.class.model_attributes || Set.new).reduce({}) do |memo, attr|
       unless (value = public_send(attr)).nil?
         memo[attr] = value
       end

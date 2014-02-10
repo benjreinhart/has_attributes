@@ -75,13 +75,6 @@ describe HasAttributes do
     end
   end
 
-  describe ".model_attributes" do
-    it "is initialized on a class as an empty set" do
-      klass = Class.new {include HasAttributes}
-      expect(klass.model_attributes).to eq(Set.new)
-    end
-  end
-
   describe "#attributes" do
     let(:klass) { create_model :attr1, :attr2 }
 
